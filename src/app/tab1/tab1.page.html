@@ -7,13 +7,13 @@
 </ion-header>
 
 <ion-content>
-  <ion-card *ngFor="let blog of blogs; trackBy: blogTracker">
+  <ion-card (click)="goToBlog(index)" *ngFor="let blog of blogs; let index = index; trackBy: blogTracker">
     <img [src]="blog.mainImg">
     <ion-card-header>
       <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
       <ion-card-title>{{blog.title}}</ion-card-title>
     </ion-card-header>
-
+    
     <ion-card-content>
       {{blog.contentPreview}}
     </ion-card-content>
