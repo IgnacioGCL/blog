@@ -3,13 +3,14 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>{{blog?.title}}</ion-title>
+    <ion-title>{{article?.title}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-img [src]="blog?.mainImg" alt=""></ion-img>
+  <ion-img [src]="article?.mainImg" alt=""></ion-img>
   <div class="content-wrapper">
-    <p>{{blog?.content}}</p>
+      <span>Escrito por: <b>{{article?.wroteBy}}</b></span>
+    <p>{{article?.content}}</p>
   </div>
 </ion-content>

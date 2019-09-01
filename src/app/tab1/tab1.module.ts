@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Tab1Page } from './tab1.page';
-import { BlogDetailComponent } from '../components/blog-detail/blog-detail.component';
+import { ArticleDetailComponent } from '../components/article-detail/article-detail.component';
 
 
 
@@ -12,8 +12,8 @@ const routes = [
   {
     path: '', component: Tab1Page
   }, {
-    path: 'blog-detail/:id',
-    component: BlogDetailComponent
+    path: 'article-detail/:id',
+    component: ArticleDetailComponent
   }
 ];
 
@@ -24,7 +24,7 @@ const routes = [
     FormsModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [Tab1Page, BlogDetailComponent],
-  entryComponents: [BlogDetailComponent]
+  declarations: [Tab1Page, ArticleDetailComponent],
+  entryComponents: [ArticleDetailComponent]
 })
 export class Tab1PageModule { }

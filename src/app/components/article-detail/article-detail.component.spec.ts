@@ -1,7 +1,7 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BlogDetailComponent } from './blog-detail.component';
+import { BlogDetailComponent } from './article-detail.component';
 
 describe('BlogDetailComponent', () => {
   let component: BlogDetailComponent;
