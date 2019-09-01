@@ -1,7 +1,7 @@
 export interface Article {
     id: string;
     title: string;
-    wroteBy: string;
+    writtenBy: string;
     contentPreview: string;
     content: string;
     mainImg: string;
