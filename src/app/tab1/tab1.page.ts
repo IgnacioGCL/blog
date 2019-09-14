@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { BlogManagerService } from '../services/blog-manager.service';
+import { BlogManagerService } from '../services/blog-manager/blog-manager.service';
 import { Subscription } from 'rxjs';
 import { Article } from '../types/blog-types';
 import { NavController } from '@ionic/angular';

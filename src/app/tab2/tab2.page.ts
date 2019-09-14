@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BlogManagerService } from '../services/blog-manager.service';
+import { BlogManagerService } from '../services/blog-manager/blog-manager.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({

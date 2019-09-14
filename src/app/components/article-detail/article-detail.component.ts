@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BlogManagerService } from '../../services/blog-manager.service';
+import { BlogManagerService } from '../../services/blog-manager/blog-manager.service';
 import { Article } from '../../types/blog-types';
 
 @Component({
@@ -19,9 +19,7 @@ export class ArticleDetailComponent implements OnInit {
 
   public ngOnInit(): void {
     const articleNumber = parseInt(this.route.snapshot.params.id, 10);
-    this.blogManager.getBlog(articleNumber).subscribe(article => {
-      this.article = article;
-    });
+    this.article = this.blogManager.getBlog(articleNumber);
   }
 
 }

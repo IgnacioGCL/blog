@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
-import { Article } from '../types/blog-types';
+import { Article } from '../../types/blog-types';
 
 
 @Injectable({
@@ -61,11 +61,8 @@ export class BlogManagerService {
     return this.articlesSubject.asObservable() as Observable<Article[]>;
   }
 
-  public getBlog(id: number): Observable<Article> {
-    return new Observable(observer => {
-      observer.next(this.articles[id]);
-      observer.complete();
-    }) as Observable<Article>;
+  public getBlog(id: number): Article {
+    return this.articlesSubject.value[id];
   }
 
   public addBlog(newArticle: Article): void {

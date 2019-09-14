@@ -1,9 +1,22 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      Tab Three
+      Perfil
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content></ion-content>
+<ion-content >
+  <div class="profile--content">
+    <div #profileImage class="profile__image"></div>
+    <ion-item>
+      <ion-label>Nombre</ion-label>
+      <ion-input [value]="userInfo.name" [disabled]="!canEdit"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Apellidos</ion-label>
+      <ion-input [value]="userInfo.surname" [disabled]="!canEdit"></ion-input>
+    </ion-item>
+    <ion-button (click)="changeEdit()">Editar información</ion-button>
+  </div>
+</ion-content>
