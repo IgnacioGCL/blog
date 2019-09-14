@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject, BehaviorSubject } from 'rxjs';
+import { Observable } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 import { Article } from '../../types/blog-types';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 
 @Injectable({
@@ -8,66 +11,28 @@ import { Article } from '../../types/blog-types';
 })
 export class BlogManagerService {
 
-  private articles = [{
-    id: 'article1',
-    title: 'Título del artículo 1',
-    writtenBy: 'Nacho',
-    // tslint:disable-next-line: max-line-length
-    contentPreview: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vero, molestiae, est, velit qui nobis enim voluptas facere vel quae similique ipsa! Assumenda corrupti quia maiores possimus ipsum nisi, corporis nemo.',
-    // tslint:disable-next-line: max-line-length
-    content: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit, rem perspiciatis eos laboriosam numquam ipsam. Veritatis maiores animi, similique expedita eum quidem tempore ullam, repellendus est asperiores odit vero hic? Voluptas fugiat labore, quam eaque saepe necessitatibus voluptatem accusantium ducimus sint nemo nulla officia a, fuga vel magnam officiis iure ipsa fugit. Dignissimos eos quas exercitationem? Numquam commodi possimus magni? Optio reprehenderit quisquam consequuntur incidunt laboriosam est enim corporis ea, officiis laborum sequi voluptatibus dignissimos, officia inventore voluptatem doloremque asperiores pariatur! Ipsum quisquam, nam eveniet cum tempora repudiandae eius facilis? Adipisci praesentium sunt magni, possimus optio sapiente quia asperiores nesciunt, itaque voluptas labore veritatis iure porro laborum ducimus molestias nobis assumenda commodi deserunt ipsa temporibus, exercitationem in a totam! Similique! Modi expedita quam culpa delectus beatae recusandae illum, mollitia quo similique sit? Porro iure nesciunt corrupti delectus. Nulla placeat debitis unde accusantium. Quidem eos iure ipsam! Ab temporibus ex cum. Hic itaque, repellat dolorum velit ratione eos consectetur vero quisquam doloribus, illo iusto eaque distinctio eveniet esse illum sunt atque tenetur cumque quaerat expedita? Reprehenderit odio ab natus nihil quibusdam. Nam reiciendis sint sequi nemo eveniet optio eius, non autem dicta beatae voluptates harum vero illum neque est, explicabo quisquam tempore atque dolor aperiam quod odit quas? Sunt, assumenda ad! Ratione ipsum alias corporis dicta fugiat repellendus labore cumque ab, illo distinctio natus nulla voluptatum, aperiam nobis asperiores! Perferendis deserunt quas saepe maiores alias earum praesentium aperiam amet, neque assumenda. Voluptatem temporibus praesentium quam ea asperiores ipsum a, voluptates totam, sunt reiciendis doloremque dolorem officiis. Adipisci atque impedit odio earum ducimus, molestiae sunt dolor rem expedita quaerat quod. Exercitationem, odio? Sint perspiciatis in beatae tenetur rerum impedit quos atque adipisci officia voluptatum excepturi minus, odio ex pariatur. Corrupti officia, animi aut ratione ab soluta labore asperiores libero quos ullam nostrum.',
-    mainImg: 'https://www.glenstone.org/wp-content/uploads/prod/2018/07/AV_Landscape-Hero-Contour-2993-1276x800.jpg'
-  }, {
-    id: 'article2',
-    title: 'Título del artículo 2',
-    writtenBy: 'Nacho',
-    // tslint:disable-next-line: max-line-length
-    contentPreview: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vero, molestiae, est, velit qui nobis enim voluptas facere vel quae similique ipsa! Assumenda corrupti quia maiores possimus ipsum nisi, corporis nemo.',
-    // tslint:disable-next-line: max-line-length
-    content: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit, rem perspiciatis eos laboriosam numquam ipsam. Veritatis maiores animi, similique expedita eum quidem tempore ullam, repellendus est asperiores odit vero hic? Voluptas fugiat labore, quam eaque saepe necessitatibus voluptatem accusantium ducimus sint nemo nulla officia a, fuga vel magnam officiis iure ipsa fugit. Dignissimos eos quas exercitationem? Numquam commodi possimus magni? Optio reprehenderit quisquam consequuntur incidunt laboriosam est enim corporis ea, officiis laborum sequi voluptatibus dignissimos, officia inventore voluptatem doloremque asperiores pariatur! Ipsum quisquam, nam eveniet cum tempora repudiandae eius facilis? Adipisci praesentium sunt magni, possimus optio sapiente quia asperiores nesciunt, itaque voluptas labore veritatis iure porro laborum ducimus molestias nobis assumenda commodi deserunt ipsa temporibus, exercitationem in a totam! Similique! Modi expedita quam culpa delectus beatae recusandae illum, mollitia quo similique sit? Porro iure nesciunt corrupti delectus. Nulla placeat debitis unde accusantium. Quidem eos iure ipsam! Ab temporibus ex cum. Hic itaque, repellat dolorum velit ratione eos consectetur vero quisquam doloribus, illo iusto eaque distinctio eveniet esse illum sunt atque tenetur cumque quaerat expedita? Reprehenderit odio ab natus nihil quibusdam. Nam reiciendis sint sequi nemo eveniet optio eius, non autem dicta beatae voluptates harum vero illum neque est, explicabo quisquam tempore atque dolor aperiam quod odit quas? Sunt, assumenda ad! Ratione ipsum alias corporis dicta fugiat repellendus labore cumque ab, illo distinctio natus nulla voluptatum, aperiam nobis asperiores! Perferendis deserunt quas saepe maiores alias earum praesentium aperiam amet, neque assumenda. Voluptatem temporibus praesentium quam ea asperiores ipsum a, voluptates totam, sunt reiciendis doloremque dolorem officiis. Adipisci atque impedit odio earum ducimus, molestiae sunt dolor rem expedita quaerat quod. Exercitationem, odio? Sint perspiciatis in beatae tenetur rerum impedit quos atque adipisci officia voluptatum excepturi minus, odio ex pariatur. Corrupti officia, animi aut ratione ab soluta labore asperiores libero quos ullam nostrum.',
-    // tslint:disable-next-line: max-line-length
-    mainImg: 'https://i0.wp.com/digital-photography-school.com/wp-content/uploads/2019/02/Landscapes-04-jeremy-flint.jpg?fit=1500%2C1000&ssl=1'
-  }, {
-    id: 'article3',
-    title: 'Título del artículo 3',
-    writtenBy: 'Nacho',
-    // tslint:disable-next-line: max-line-length
-    contentPreview: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vero, molestiae, est, velit qui nobis enim voluptas facere vel quae similique ipsa! Assumenda corrupti quia maiores possimus ipsum nisi, corporis nemo.',
-    // tslint:disable-next-line: max-line-length
-    content: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit, rem perspiciatis eos laboriosam numquam ipsam. Veritatis maiores animi, similique expedita eum quidem tempore ullam, repellendus est asperiores odit vero hic? Voluptas fugiat labore, quam eaque saepe necessitatibus voluptatem accusantium ducimus sint nemo nulla officia a, fuga vel magnam officiis iure ipsa fugit. Dignissimos eos quas exercitationem? Numquam commodi possimus magni? Optio reprehenderit quisquam consequuntur incidunt laboriosam est enim corporis ea, officiis laborum sequi voluptatibus dignissimos, officia inventore voluptatem doloremque asperiores pariatur! Ipsum quisquam, nam eveniet cum tempora repudiandae eius facilis? Adipisci praesentium sunt magni, possimus optio sapiente quia asperiores nesciunt, itaque voluptas labore veritatis iure porro laborum ducimus molestias nobis assumenda commodi deserunt ipsa temporibus, exercitationem in a totam! Similique! Modi expedita quam culpa delectus beatae recusandae illum, mollitia quo similique sit? Porro iure nesciunt corrupti delectus. Nulla placeat debitis unde accusantium. Quidem eos iure ipsam! Ab temporibus ex cum. Hic itaque, repellat dolorum velit ratione eos consectetur vero quisquam doloribus, illo iusto eaque distinctio eveniet esse illum sunt atque tenetur cumque quaerat expedita? Reprehenderit odio ab natus nihil quibusdam. Nam reiciendis sint sequi nemo eveniet optio eius, non autem dicta beatae voluptates harum vero illum neque est, explicabo quisquam tempore atque dolor aperiam quod odit quas? Sunt, assumenda ad! Ratione ipsum alias corporis dicta fugiat repellendus labore cumque ab, illo distinctio natus nulla voluptatum, aperiam nobis asperiores! Perferendis deserunt quas saepe maiores alias earum praesentium aperiam amet, neque assumenda. Voluptatem temporibus praesentium quam ea asperiores ipsum a, voluptates totam, sunt reiciendis doloremque dolorem officiis. Adipisci atque impedit odio earum ducimus, molestiae sunt dolor rem expedita quaerat quod. Exercitationem, odio? Sint perspiciatis in beatae tenetur rerum impedit quos atque adipisci officia voluptatum excepturi minus, odio ex pariatur. Corrupti officia, animi aut ratione ab soluta labore asperiores libero quos ullam nostrum.',
-    mainImg: 'https://cdn.mos.cms.futurecdn.net/FUE7XiFApEqWZQ85wYcAfM.jpg'
-  }, {
-    id: 'article4',
-    title: 'Título del artículo 4',
-    writtenBy: 'Nacho',
-    // tslint:disable-next-line: max-line-length
-    contentPreview: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vero, molestiae, est, velit qui nobis enim voluptas facere vel quae similique ipsa! Assumenda corrupti quia maiores possimus ipsum nisi, corporis nemo.',
-    // tslint:disable-next-line: max-line-length
-    content: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit, rem perspiciatis eos laboriosam numquam ipsam. Veritatis maiores animi, similique expedita eum quidem tempore ullam, repellendus est asperiores odit vero hic? Voluptas fugiat labore, quam eaque saepe necessitatibus voluptatem accusantium ducimus sint nemo nulla officia a, fuga vel magnam officiis iure ipsa fugit. Dignissimos eos quas exercitationem? Numquam commodi possimus magni? Optio reprehenderit quisquam consequuntur incidunt laboriosam est enim corporis ea, officiis laborum sequi voluptatibus dignissimos, officia inventore voluptatem doloremque asperiores pariatur! Ipsum quisquam, nam eveniet cum tempora repudiandae eius facilis? Adipisci praesentium sunt magni, possimus optio sapiente quia asperiores nesciunt, itaque voluptas labore veritatis iure porro laborum ducimus molestias nobis assumenda commodi deserunt ipsa temporibus, exercitationem in a totam! Similique! Modi expedita quam culpa delectus beatae recusandae illum, mollitia quo similique sit? Porro iure nesciunt corrupti delectus. Nulla placeat debitis unde accusantium. Quidem eos iure ipsam! Ab temporibus ex cum. Hic itaque, repellat dolorum velit ratione eos consectetur vero quisquam doloribus, illo iusto eaque distinctio eveniet esse illum sunt atque tenetur cumque quaerat expedita? Reprehenderit odio ab natus nihil quibusdam. Nam reiciendis sint sequi nemo eveniet optio eius, non autem dicta beatae voluptates harum vero illum neque est, explicabo quisquam tempore atque dolor aperiam quod odit quas? Sunt, assumenda ad! Ratione ipsum alias corporis dicta fugiat repellendus labore cumque ab, illo distinctio natus nulla voluptatum, aperiam nobis asperiores! Perferendis deserunt quas saepe maiores alias earum praesentium aperiam amet, neque assumenda. Voluptatem temporibus praesentium quam ea asperiores ipsum a, voluptates totam, sunt reiciendis doloremque dolorem officiis. Adipisci atque impedit odio earum ducimus, molestiae sunt dolor rem expedita quaerat quod. Exercitationem, odio? Sint perspiciatis in beatae tenetur rerum impedit quos atque adipisci officia voluptatum excepturi minus, odio ex pariatur. Corrupti officia, animi aut ratione ab soluta labore asperiores libero quos ullam nostrum.',
-    mainImg: 'https://iso.500px.com/wp-content/uploads/2014/07/big-one.jpg'
-  }, {
-    id: 'article5',
-    title: 'Título del artículo 5',
-    writtenBy: 'Nacho',
-    // tslint:disable-next-line: max-line-length
-    contentPreview: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vero, molestiae, est, velit qui nobis enim voluptas facere vel quae similique ipsa! Assumenda corrupti quia maiores possimus ipsum nisi, corporis nemo.',
-    // tslint:disable-next-line: max-line-length
-    content: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit, rem perspiciatis eos laboriosam numquam ipsam. Veritatis maiores animi, similique expedita eum quidem tempore ullam, repellendus est asperiores odit vero hic? Voluptas fugiat labore, quam eaque saepe necessitatibus voluptatem accusantium ducimus sint nemo nulla officia a, fuga vel magnam officiis iure ipsa fugit. Dignissimos eos quas exercitationem? Numquam commodi possimus magni? Optio reprehenderit quisquam consequuntur incidunt laboriosam est enim corporis ea, officiis laborum sequi voluptatibus dignissimos, officia inventore voluptatem doloremque asperiores pariatur! Ipsum quisquam, nam eveniet cum tempora repudiandae eius facilis? Adipisci praesentium sunt magni, possimus optio sapiente quia asperiores nesciunt, itaque voluptas labore veritatis iure porro laborum ducimus molestias nobis assumenda commodi deserunt ipsa temporibus, exercitationem in a totam! Similique! Modi expedita quam culpa delectus beatae recusandae illum, mollitia quo similique sit? Porro iure nesciunt corrupti delectus. Nulla placeat debitis unde accusantium. Quidem eos iure ipsam! Ab temporibus ex cum. Hic itaque, repellat dolorum velit ratione eos consectetur vero quisquam doloribus, illo iusto eaque distinctio eveniet esse illum sunt atque tenetur cumque quaerat expedita? Reprehenderit odio ab natus nihil quibusdam. Nam reiciendis sint sequi nemo eveniet optio eius, non autem dicta beatae voluptates harum vero illum neque est, explicabo quisquam tempore atque dolor aperiam quod odit quas? Sunt, assumenda ad! Ratione ipsum alias corporis dicta fugiat repellendus labore cumque ab, illo distinctio natus nulla voluptatum, aperiam nobis asperiores! Perferendis deserunt quas saepe maiores alias earum praesentium aperiam amet, neque assumenda. Voluptatem temporibus praesentium quam ea asperiores ipsum a, voluptates totam, sunt reiciendis doloremque dolorem officiis. Adipisci atque impedit odio earum ducimus, molestiae sunt dolor rem expedita quaerat quod. Exercitationem, odio? Sint perspiciatis in beatae tenetur rerum impedit quos atque adipisci officia voluptatum excepturi minus, odio ex pariatur. Corrupti officia, animi aut ratione ab soluta labore asperiores libero quos ullam nostrum.',
-    mainImg: 'https://i.ytimg.com/vi/BfCwN4iy6T8/maxresdefault.jpg'
-  }];
-  private articlesSubject = new BehaviorSubject<Article[]>(this.articles);
+
+  constructor(private db: AngularFirestore, private storage: AngularFireStorage) { }
 
   public getBlogs(): Observable<Article[]> {
-    return this.articlesSubject.asObservable() as Observable<Article[]>;
+    return this.db.collection<Article>('articulos', ref => ref.orderBy('creationDate', 'asc')).valueChanges();
   }
 
-  public getBlog(id: number): Article {
-    return this.articlesSubject.value[id];
+  public getBlog(id: number): Observable<Article> {
+    return this.db.doc<Article>(`articulos/${id}`).valueChanges();
   }
 
-  public addBlog(newArticle: Article): void {
-    newArticle.id = `article${this.articles.length + 1}`;
-    this.articles.push(newArticle);
-    this.articlesSubject.next(this.articles);
+  public addBlog(newArticle: Article): Promise<void> {
+    const articleId = this.db.createId();
+    return this.uploadImageAndGetUrl(articleId, newArticle.mainImg)
+      .then(res => {
+        console.log(res);
+      });
+    // return this.db.doc<Article>(`articulos/${articleId}`).set({ ...newArticle, id: articleId });
+  }
+
+  private uploadImageAndGetUrl(articleId: string, image: string): Promise<any> {
+    const upload = this.storage.upload(`articulos/${articleId}`, image);
+    return upload.then(success => success);
   }
 }

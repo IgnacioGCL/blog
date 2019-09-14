@@ -25,8 +25,8 @@ export class Tab3Page implements OnInit, OnDestroy {
     });
   }
 
-  public changeEdit(): void{
-    this.canEdit = !this.canEdit; 
+  public changeEdit(): void {
+    this.canEdit = !this.canEdit;
   }
 
   public ngOnDestroy(): void {

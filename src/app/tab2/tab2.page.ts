@@ -26,7 +26,13 @@ export class Tab2Page implements OnInit {
   }
 
   public createArticle() {
-    this.blogManager.addBlog(this.form.value);
+    this.blogManager.addBlog(this.form.value)
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.error(err);
+      });
     this.form.reset();
   }
 
