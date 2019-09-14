@@ -28,8 +28,8 @@ export class Tab1Page implements OnInit, OnDestroy {
     return index;
   }
 
-  public goToArticle(index: number): void {
-    this.nav.navigateForward(['tabs', 'tab1', 'article-detail', index]);
+  public goToArticle(id: string): void {
+    this.nav.navigateForward(['blog', 'articles', 'article-detail', id]);
   }
 
   public ngOnDestroy(): void {

@@ -20,7 +20,7 @@ export class ArticleDetailComponent implements OnInit, OnDestroy {
   ) { }
 
   public ngOnInit(): void {
-    const articleNumber = parseInt(this.route.snapshot.params.id, 10);
+    const articleNumber = this.route.snapshot.params.id;
     this.blog$ = this.blogManager.getBlog(articleNumber).subscribe(article => {
       this.article = article;
     });
