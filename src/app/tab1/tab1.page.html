@@ -7,13 +7,14 @@
 </ion-header>
 
 <ion-content>
-  <ion-card (click)="goToArticle(article.id)" *ngFor="let article of articles; let index = index; trackBy: articleTracker">
+  <ion-card (click)="goToArticle(article.id)"
+    *ngFor="let article of articles; let index = index; trackBy: articleTracker">
     <img [src]="article.mainImg">
     <ion-card-header>
-      <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
+      <ion-card-subtitle>{{article.creationDate | customDate}}</ion-card-subtitle>
       <ion-card-title>{{article.title}}</ion-card-title>
     </ion-card-header>
-    
+
     <ion-card-content>
       {{article.contentPreview}}
     </ion-card-content>
