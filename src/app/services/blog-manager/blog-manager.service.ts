@@ -13,7 +13,7 @@ export class BlogManagerService {
   constructor(private db: AngularFirestore) { }
 
   public getBlogs(): Observable<Article[]> {
-    return this.db.collection<Article>('articulos', ref => ref.orderBy('creationDate', 'asc')).valueChanges();
+    return this.db.collection<Article>('articulos', ref => ref.orderBy('creationDate', 'desc')).valueChanges();
   }
 
   public getBlog(id: number): Observable<Article> {
